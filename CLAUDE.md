@@ -17,8 +17,12 @@ Empresa de pinturas y recubrimientos arquitectónicos. Sitio web tipo landing + 
 - haikrom-light:     #fffcfb
 
 ## Fuentes
-- Clash Display  → font-clash      (headings: h1–h6)
-- Montserrat     → font-montserrat (todo lo demás: body, labels, captions)
+- **Clash Display** → `font-clash` (headings: h1–h6)
+  - Self-hosted via `@font-face` en `src/index.css`
+  - Archivos `.woff2` en `/public/fonts/ClashDisplay/` (Regular, Medium, Semibold, Bold, Light)
+  - **NO** está en Google Fonts — nunca usar `@import` de Google Fonts para esta fuente
+- **Montserrat** → `font-montserrat` (todo lo demás: body, labels, captions)
+  - Cargada vía Google Fonts CDN (`@import` en `src/index.css`)
 - Roboto fue eliminado — ya no se usa en ningún componente
 
 ## Design Token System
@@ -181,6 +185,7 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - [x] Imágenes PNG de tendencias conectadas
 - [x] Logo clickeable en todas las páginas → navega al home
 - [x] Datos compartidos extraídos (SocialIcons.jsx, site.js)
+- [x] Clash Display self-hosted (woff2 en /public/fonts/ClashDisplay/, @font-face en index.css)
 - [ ] Imágenes distintas por paleta de color (actualmente todas apuntan a la misma PNG)
 - [ ] URLs reales para redes sociales (actualmente href="#")
 - [ ] Subir a Vercel
