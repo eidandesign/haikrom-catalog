@@ -117,3 +117,4 @@ Para más información sobre Haikrom, visita www.haikrom.com
 ---
 
 **Desarrollado con ❤️ para Haikrom**
+# haikrom-catalog
