@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__9153075c-8993-4294-a6c3-cbbf3a7758b5__get_design_context",
+      "Bash(npm install *)",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__9153075c-8993-4294-a6c3-cbbf3a7758b5__get_screenshot"
+    ]
+  }
+}

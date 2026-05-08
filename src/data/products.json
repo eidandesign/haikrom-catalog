@@ -1,0 +1,169 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Pintura Interior Premium",
+      "category": "Pintura Arquitectonica Interior",
+      "price": 450,
+      "description": "Pintura acrílica de alta durabilidad para interiores. Acabado mate, lavable y resistente a manchas.",
+      "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=500&h=500&fit=crop",
+      "stock": 25,
+      "coverage": "12 m²/litro",
+      "duration": "5 años"
+    },
+    {
+      "id": 2,
+      "name": "Pintura Interior Brillante",
+      "category": "Pintura Arquitectonica Interior",
+      "price": 380,
+      "description": "Acabado brillante para espacios con mucha humedad. Ideal para cocinas y baños.",
+      "image": "https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=500&fit=crop",
+      "stock": 18,
+      "coverage": "10 m²/litro",
+      "duration": "4 años"
+    },
+    {
+      "id": 3,
+      "name": "Pintura Interior Satín",
+      "category": "Pintura Arquitectonica Interior",
+      "price": 420,
+      "description": "Acabado satinado con excelente resistencia al lavado y durabilidad superior.",
+      "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=500&h=500&fit=crop",
+      "stock": 22,
+      "coverage": "11 m²/litro",
+      "duration": "5 años"
+    },
+    {
+      "id": 4,
+      "name": "Pintura Exterior UV Protect",
+      "category": "Pintura Arquitectonica Exterior",
+      "price": 680,
+      "description": "Protección máxima contra rayos UV y cambios climáticos extremos. Apta para fachadas.",
+      "image": "https://images.unsplash.com/photo-1565193566173-7cde230f01da?w=500&h=500&fit=crop",
+      "stock": 15,
+      "coverage": "9 m²/litro",
+      "duration": "10 años"
+    },
+    {
+      "id": 5,
+      "name": "Pintura Exterior Premium",
+      "category": "Pintura Arquitectonica Exterior",
+      "price": 620,
+      "description": "Acabado superior con resistencia a moho y algas. Ideal para climas húmedos.",
+      "image": "https://images.unsplash.com/photo-1565193566173-7cde230f01da?w=500&h=500&fit=crop",
+      "stock": 20,
+      "coverage": "10 m²/litro",
+      "duration": "8 años"
+    },
+    {
+      "id": 6,
+      "name": "Pintura Exterior Elastomérica",
+      "category": "Pintura Arquitectonica Exterior",
+      "price": 750,
+      "description": "Propiedades elásticas que se adaptan a dilataciones. Excelente para grietas.",
+      "image": "https://images.unsplash.com/photo-1565193566173-7cde230f01da?w=500&h=500&fit=crop",
+      "stock": 12,
+      "coverage": "8 m²/litro",
+      "duration": "10 años"
+    },
+    {
+      "id": 7,
+      "name": "Primer Epoxico Estándar",
+      "category": "Primer Epoxico Rico en Zinc",
+      "price": 890,
+      "description": "Recubrimiento de dos componentes con alto contenido de zinc. Protección anticorrosiva.",
+      "image": "https://images.unsplash.com/photo-1589939705066-5a101c481851?w=500&h=500&fit=crop",
+      "stock": 10,
+      "coverage": "8 m²/litro",
+      "duration": "7 años"
+    },
+    {
+      "id": 8,
+      "name": "Primer Epoxico Industrial",
+      "category": "Primer Epoxico Rico en Zinc",
+      "price": 1200,
+      "description": "Para aplicaciones industriales pesadas. Máxima adhesión y durabilidad.",
+      "image": "https://images.unsplash.com/photo-1589939705066-5a101c481851?w=500&h=500&fit=crop",
+      "stock": 8,
+      "coverage": "7 m²/litro",
+      "duration": "10 años"
+    },
+    {
+      "id": 9,
+      "name": "Primer Epoxico Alto Zinc",
+      "category": "Primer Epoxico Rico en Zinc",
+      "price": 950,
+      "description": "Máximo contenido de zinc metálico para protección superior de metales.",
+      "image": "https://images.unsplash.com/photo-1589939705066-5a101c481851?w=500&h=500&fit=crop",
+      "stock": 14,
+      "coverage": "6 m²/litro",
+      "duration": "8 años"
+    },
+    {
+      "id": 10,
+      "name": "Impermeabilizante Premium 100%",
+      "category": "Impermeabilizante 100% acrílico",
+      "price": 550,
+      "description": "Impermeabilizante 100% acrílico. Acabado liso, flexible y de larga duración.",
+      "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=500&h=500&fit=crop",
+      "stock": 20,
+      "coverage": "10 m²/litro",
+      "duration": "10 años"
+    },
+    {
+      "id": 11,
+      "name": "Impermeabilizante Flexible",
+      "category": "Impermeabilizante 100% acrílico",
+      "price": 580,
+      "description": "Propiedades elásticas para movimientos de la estructura. Apta para terrazas.",
+      "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=500&h=500&fit=crop",
+      "stock": 18,
+      "coverage": "9 m²/litro",
+      "duration": "10 años"
+    },
+    {
+      "id": 12,
+      "name": "Impermeabilizante Espesado",
+      "category": "Impermeabilizante 100% acrílico",
+      "price": 620,
+      "description": "Versión espesada para mejor cobertura en grietas y juntas. Alta viscosidad.",
+      "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=500&h=500&fit=crop",
+      "stock": 16,
+      "coverage": "8 m²/litro",
+      "duration": "10 años"
+    },
+    {
+      "id": 13,
+      "name": "Pintura Tráfico Base Solvente",
+      "category": "Pintura de Tráfico",
+      "price": 720,
+      "description": "Pintura base solvente para marcas viales. Secado rápido y máxima adherencia.",
+      "image": "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=500&h=500&fit=crop",
+      "stock": 12,
+      "coverage": "6 m²/litro",
+      "duration": "3 años"
+    },
+    {
+      "id": 14,
+      "name": "Pintura Tráfico Premium Reflectiva",
+      "category": "Pintura de Tráfico",
+      "price": 950,
+      "description": "Con microesferas de vidrio reflectantes para mayor seguridad nocturna.",
+      "image": "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=500&h=500&fit=crop",
+      "stock": 9,
+      "coverage": "5 m²/litro",
+      "duration": "4 años"
+    },
+    {
+      "id": 15,
+      "name": "Pintura Tráfico Termoplástica",
+      "category": "Pintura de Tráfico",
+      "price": 890,
+      "description": "Pintura termoplástica de alto rendimiento. Máxima durabilidad en vías de alto tráfico.",
+      "image": "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=500&h=500&fit=crop",
+      "stock": 11,
+      "coverage": "5 m²/litro",
+      "duration": "5 años"
+    }
+  ]
+}
