@@ -1,308 +1,390 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { type as t, layout } from '../styles/tokens'
+import MobileMenu from '../components/MobileMenu'
+import { SOCIAL_LINKS } from '../components/SocialIcons'
+import { LOGO, footerColumns } from '../data/site'
+import { type as t } from '../styles/tokens'
 
+// ── Assets ────────────────────────────────────────────────────────────────────
+const CONTACTO  = '/images/contacto.jpg'
+const FOOTER_BG = '/images/footer.jpg'
+const HERO_VIDEO =
+  'https://res.cloudinary.com/duxnks729/video/upload/v1778214479/magnific_style-p-minimalist-archit_2944250119_bdibcj.mp4'
+
+// ── Trend data ────────────────────────────────────────────────────────────────
+// Each palette carries its own `image` for future per-palette background swaps.
+// All palettes currently share the section default — just update `image` when ready.
 const trends = [
   {
     id: 'natural',
-    overline: 'Tendencia 01',
     title: 'Arquitectura natural y orgánica',
-    copy: 'Acabados minerales y tonos tierra que reflejan conexión con lo natural. Ideal para proyectos residenciales y espacios que buscan armonía con el entorno.',
-    palette: [
-      { name: 'Tierra Viva',    color: '#8B6347', image: '/images/tendencias_1.jpg' },
-      { name: 'Verde Suave',    color: '#7A9E7E', image: '/images/Building facade.jpg' },
-      { name: 'Arena Caliente', color: '#C9A87C', image: '/images/Image.jpg' },
-      { name: 'Arcilla',        color: '#A0522D', image: '/images/Background Image.jpg' },
+    copy: 'Superficies con acabados minerales y tonos tierra que reflejan una conexión con lo natural y lo atemporal. Ideal para proyectos residenciales o espacios de descanso.',
+    image: '/images/tendencias_1.png',
+    palettes: [
+      { name: 'Tierra Viva',  swatches: ['#baa58d', '#e1a6ad', '#947d6f'], image: '/images/tendencias_1.png' },
+      { name: 'Verde Suave',  swatches: ['#6ba539', '#c3dc93', '#a0dab3'], image: '/images/tendencias_1.png' },
+      { name: 'Luz Natural',  swatches: ['#9b2242', '#b8ccea', '#63666a'], image: '/images/tendencias_1.png' },
     ],
   },
   {
-    id: 'urbano',
-    overline: 'Tendencia 02',
-    title: 'Contraste urbano',
-    copy: 'Colores como grafito, azul acero o negro que dan modernidad a cualquier fachada. Inspirado en el diseño industrial y la arquitectura contemporánea de ciudad.',
-    palette: [
-      { name: 'Grafito',         color: '#4A4A4A', image: '/images/tendencias_2.jpg' },
-      { name: 'Azul Acero',      color: '#4A6FA5', image: '/images/haikrom-hero.jpg' },
-      { name: 'Negro Absoluto',  color: '#1A1A1A', image: '/images/casos_de_exito.jpg' },
-      { name: 'Bronce Metálico', color: '#8C6D3F', image: '/images/porque_1.jpg' },
+    id: 'moderno',
+    title: 'Frescura moderna',
+    copy: 'Inspirada en la pureza y ligereza del aire. Ideal para oficinas o proyectos con una estética minimalista.',
+    image: '/images/tendencias_2.png',
+    palettes: [
+      { name: 'Cielos claros',      swatches: ['#ffffff', '#a7a8a9', '#147bd1'], image: '/images/tendencias_2.png' },
+      { name: 'Horizonte costero',  swatches: ['#ffffff', '#baa58d', '#426da9'], image: '/images/tendencias_2.png' },
+      { name: 'Minimalismo cálido', swatches: ['#baa58d', '#a7a8a9', '#3111c9'], image: '/images/tendencias_2.png' },
     ],
   },
   {
     id: 'luminoso',
-    overline: 'Tendencia 03',
-    title: 'Espacios luminosos',
-    copy: 'Tonos cálidos y claros que amplían visualmente los espacios, favoreciendo la calma y la luz natural. La opción ideal para interiores modernos y acogedores.',
-    palette: [
-      { name: 'Blanco Cálido', color: '#F5F0E8', image: '/images/tendencias_3.jpg' },
-      { name: 'Marfil',        color: '#EFE9D0', image: '/images/porque_2.jpg' },
-      { name: 'Arena Pálida',  color: '#E8D5B0', image: '/images/Hero Image.jpg' },
-      { name: 'Rosa Nude',     color: '#DEB8A0', image: '/images/porque_3.jpg' },
+    title: 'Espacios Luminosos',
+    copy: 'Tonos claros y cálidos que amplían visualmente los espacios, favoreciendo la calma y el bienestar. Perfecto para interiores residenciales o corporativos.',
+    image: '/images/tendencias_3.png',
+    palettes: [
+      { name: 'Estética mediterránea', swatches: ['#ffffff', '#e9ae87', '#baa58d'], image: '/images/tendencias_3.png' },
+      { name: 'Armonía natural',       swatches: ['#ffffff', '#a7a8a9', '#c3dc93'], image: '/images/tendencias_3.png' },
+      { name: 'Frescura moderna',      swatches: ['#ffffff', '#baa58d', '#b8ccea'], image: '/images/tendencias_3.png' },
     ],
   },
 ]
 
-// ── Swatch chip ────────────────────────────────────────────────────────────────
-function SwatchChip({ swatch, active, onClick }) {
+// ── PaletteCard ───────────────────────────────────────────────────────────────
+// Clickable card showing a palette name + 3 color swatches.
+// `isActive` highlights the selected card with a white outline + darker bg.
+function PaletteCard({ name, swatches, isActive, onClick }) {
   return (
     <motion.button
+      type="button"
       onClick={onClick}
-      whileHover={{ scale: 1.06 }}
-      whileTap={{ scale: 0.96 }}
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.15, ease: 'easeOut' }}
-      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-full border-2 transition-colors duration-200 ${
-        active
-          ? 'border-haikrom-dark-blue bg-white shadow-md'
-          : 'border-transparent bg-gray-100 hover:bg-gray-200'
-      }`}
+      className="rounded-[4px] p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 shrink-0 w-[200px] sm:w-[240px] lg:w-[270px] text-left"
+      style={{
+        backgroundColor: isActive ? 'rgba(0,0,0,0.70)' : 'rgba(0,0,0,0.51)',
+        outline: isActive ? '2px solid rgba(255,255,255,0.70)' : '2px solid transparent',
+        outlineOffset: '-2px',
+      }}
     >
-      <span
-        className="w-4 h-4 rounded-full shrink-0 border border-black/10"
-        style={{ backgroundColor: swatch.color }}
-      />
-      <span className={`${t.bodySm} text-gray-800 whitespace-nowrap`}>{swatch.name}</span>
+      <p className={`${t.body} sm:text-xl text-white whitespace-nowrap`}>{name}</p>
+      <div className="grid grid-cols-3 gap-3 sm:gap-6 h-9 sm:h-11">
+        {swatches.map((color, i) => (
+          <div
+            key={i}
+            className="rounded-[2px]"
+            style={{
+              backgroundColor: color,
+              outline: color === '#ffffff' ? '1px solid rgba(255,255,255,0.35)' : 'none',
+            }}
+          />
+        ))}
+      </div>
     </motion.button>
   )
 }
 
-// ── Individual trend section ───────────────────────────────────────────────────
-function TrendSection({ trend, index }) {
+// ── TrendSection ──────────────────────────────────────────────────────────────
+// Full-screen section. Clicking a PaletteCard swaps the background image
+// with an animated crossfade. Text + cards are anchored at the bottom-left.
+function TrendSection({ trend, onVerProducto }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = trend.palette[activeIdx]
-  const isEven = index % 2 === 0
+  const bgImage = trend.palettes[activeIdx].image ?? trend.image
 
   return (
-    <section className="flex flex-col md:flex-row min-h-[90vh] md:min-h-screen">
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
 
-      {/* Image panel */}
-      <div
-        className={`relative w-full md:w-1/2 min-h-[55vw] md:min-h-full ${
-          isEven ? 'md:order-first' : 'md:order-last'
-        }`}
-      >
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={active.image}
-            src={active.image}
-            alt={active.name}
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.55, ease: [0.25, 0, 0.3, 1] }}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        </AnimatePresence>
-
-        {/* Active color bar at bottom of image */}
-        <motion.div
-          key={active.color}
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="absolute bottom-0 left-0 right-0 h-1 origin-left"
-          style={{ backgroundColor: active.color }}
+      {/* Background image — crossfade on palette change */}
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={bgImage}
+          src={bgImage}
+          alt=""
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0 h-full w-full object-cover"
         />
+      </AnimatePresence>
 
-        {/* Active color pill overlay */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active.name}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className="absolute bottom-6 left-6 flex items-center gap-2.5 bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-full shadow-lg"
+      {/* Bottom gradient for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+
+      {/* Content — bottom-left anchor */}
+      <div className="relative flex flex-col justify-end min-h-screen px-4 pb-8 sm:pb-10 md:px-16 gap-4 sm:gap-6 pt-20">
+
+        {/* Text + CTA */}
+        <div className="flex flex-col gap-4 sm:gap-6 max-w-full sm:max-w-[586px]">
+          <h2 className={`${t.h3} text-haikrom-light`}>{trend.title}</h2>
+          <p className={`${t.body} sm:text-xl text-haikrom-light/90`}>{trend.copy}</p>
+          <motion.button
+            onClick={onVerProducto}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            className={`${t.label} bg-haikrom-red text-white px-6 py-2.5 rounded-lg w-fit`}
           >
-            <span
-              className="w-4 h-4 rounded-full border border-black/10"
-              style={{ backgroundColor: active.color }}
+            Ver Producto
+          </motion.button>
+        </div>
+
+        {/* Palette cards — horizontal scroll on mobile */}
+        <div className="flex gap-3 sm:gap-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none">
+          {trend.palettes.map((p, i) => (
+            <PaletteCard
+              key={p.name}
+              name={p.name}
+              swatches={p.swatches}
+              isActive={i === activeIdx}
+              onClick={() => setActiveIdx(i)}
             />
-            <span className={`${t.bodySm} font-semibold text-gray-800`}>{active.name}</span>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Text panel */}
-      <div
-        className={`w-full md:w-1/2 flex flex-col justify-center px-8 py-14 md:px-16 md:py-20 bg-haikrom-light ${
-          isEven ? 'md:order-last' : 'md:order-first'
-        }`}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <p className={`${t.overline} text-haikrom-red mb-3`}>{trend.overline}</p>
-          <h2 className={`${t.h2} text-haikrom-dark-blue`}>{trend.title}</h2>
-          <p className={`mt-5 ${t.bodyLg} text-gray-600 max-w-[460px]`}>{trend.copy}</p>
-        </motion.div>
-
-        {/* Palette picker */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
-          className="mt-10"
-        >
-          <p className={`${t.caption} text-gray-400 uppercase tracking-widest mb-4`}>Paleta de color</p>
-          <div className="flex flex-wrap gap-2.5">
-            {trend.palette.map((swatch, i) => (
-              <SwatchChip
-                key={swatch.name}
-                swatch={swatch}
-                active={i === activeIdx}
-                onClick={() => setActiveIdx(i)}
-              />
-            ))}
-          </div>
-
-          {/* Active color display */}
-          <div className="mt-8 flex items-center gap-4">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={active.color}
-                initial={{ scale: 0.7, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.7, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="w-10 h-10 rounded-full border-2 border-white shadow-md shrink-0"
-                style={{ backgroundColor: active.color }}
-              />
-            </AnimatePresence>
-            <div>
-              <p className={`${t.caption} text-gray-400 uppercase tracking-widest`}>Color activo</p>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={active.name}
-                  initial={{ opacity: 0, x: -6 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 6 }}
-                  transition={{ duration: 0.2 }}
-                  className={`${t.bodySm} font-semibold text-gray-800`}
-                >
-                  {active.name}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-          </div>
-        </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   )
 }
 
-// ── Page ────────────────────────────────────────────────────────────────────────
-export default function Tendencias({ onBack }) {
+// ── Main Page ─────────────────────────────────────────────────────────────────
+export default function Tendencias({ onBack, onNavigateToProduct }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="min-h-screen bg-haikrom-light"
+      className="bg-white"
     >
 
-      {/* Back button */}
-      <div className="fixed top-6 left-6 z-50">
-        <motion.button
+      {/* ── Fixed Header ───────────────────────────────────────────────────── */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-5 md:px-16">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
+        <button
           onClick={onBack}
-          whileHover={{ x: -3 }}
-          whileTap={{ scale: 0.96 }}
-          transition={{ duration: 0.15 }}
-          className={`flex items-center gap-2 bg-white/90 backdrop-blur-sm text-haikrom-dark-blue px-4 py-2.5 rounded-full shadow-md ${t.bodySm} font-semibold hover:bg-white transition-colors`}
+          aria-label="Ir al inicio"
+          className="relative hover:opacity-75 transition-opacity"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M19 12H5M12 5l-7 7 7 7" />
-          </svg>
-          Inicio
-        </motion.button>
-      </div>
+          <img src={LOGO} alt="Haikrom" className="h-9 w-auto sm:h-10 md:h-[50px]" />
+        </button>
+        <button
+          aria-label="Abrir menú"
+          onClick={() => setMenuOpen(true)}
+          className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px]"
+        >
+          <span className="block w-6 h-0.5 bg-white rounded-full" />
+          <span className="block w-6 h-0.5 bg-white rounded-full" />
+          <span className="block w-6 h-0.5 bg-white rounded-full" />
+        </button>
+      </header>
 
-      {/* ── Hero ─────────────────────────────────────────────────────────────── */}
-      <section className="relative flex items-center justify-center min-h-[65vh] bg-haikrom-dark-blue overflow-hidden px-8">
-        {/* Decorative gradient blobs */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-10 blur-3xl"
-          style={{ background: 'radial-gradient(circle, #edb038, transparent 70%)' }} />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-10 blur-3xl"
-          style={{ background: 'radial-gradient(circle, #ee3e23, transparent 70%)' }} />
+      {/* ── Hero — Full-screen video ─────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/images/tendencias_header.png"
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
 
-        <div className="relative text-center max-w-[768px]">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className={`${t.overline} text-haikrom-gold mb-4`}
-          >
-            Inspiración arquitectónica
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0, 0.3, 1] }}
-            className={`${t.h1} text-haikrom-light`}
-          >
-            Tendencias Arquitectónicas
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className={`mt-6 ${t.bodyLg} text-white/70 max-w-[560px] mx-auto`}
-          >
-            Descubre las paletas que están definiendo la arquitectura contemporánea. Selecciona un color para ver cómo transforma el espacio.
-          </motion.p>
-
-          {/* Scroll cue */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="absolute -bottom-12 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="text-white/40"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 5v14M5 12l7 7 7-7" />
-              </svg>
-            </motion.div>
-          </motion.div>
+        {/* Text — bottom-right anchor, left-aligned text */}
+        <div className="relative flex flex-col items-end justify-end min-h-screen px-4 pb-10 sm:pb-14 md:px-16 pt-20">
+          <div className="flex flex-col gap-4 sm:gap-8 w-full sm:max-w-[479px] text-left">
+            <h2 className={`${t.h2} text-haikrom-light`}>
+              El color es nuestro lenguaje.
+            </h2>
+            <p className={`${t.bodyLg} text-haikrom-light/90`}>
+              En Haikrom transformamos el color en una herramienta de innovación.
+              Más de 25 años desarrollando recubrimientos personalizados
+              que protegen, inspiran y comunican la esencia de cada proyecto.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ── Trend sections ───────────────────────────────────────────────────── */}
-      {trends.map((trend, i) => (
-        <TrendSection key={trend.id} trend={trend} index={i} />
+      {/* ── Trend Sections ──────────────────────────────────────────────────── */}
+      {trends.map((trend) => (
+        <TrendSection
+          key={trend.id}
+          trend={trend}
+          onVerProducto={onBack}
+        />
       ))}
 
-      {/* ── CTA ──────────────────────────────────────────────────────────────── */}
-      <section className="bg-haikrom-dark-blue px-8 py-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <p className={`${t.overline} text-haikrom-gold mb-4`}>¿Listo para transformar tu espacio?</p>
-          <h2 className={`${t.h2} text-white`}>Habla con nuestros especialistas</h2>
-          <p className={`mt-4 ${t.bodyLg} text-white/60 max-w-[480px] mx-auto`}>
-            Te ayudamos a elegir la paleta perfecta para tu proyecto arquitectónico.
-          </p>
-          <motion.button
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.15 }}
-            onClick={onBack}
-            className={`mt-10 btn btn-primary px-8 py-4 rounded-lg ${t.label}`}
-          >
-            Solicita asesoría →
-          </motion.button>
-        </motion.div>
+      {/* ── Contacto ────────────────────────────────────────────────────────── */}
+      <section className="px-4 py-12 sm:py-16 md:px-16">
+        <div className="mx-auto max-w-[1280px]">
+          <div className="text-center">
+            <p className={`${t.overline} text-haikrom-dark-blue/60`}>Contacto</p>
+            <h2 className={`mt-2 ${t.h2} text-haikrom-dark-blue`}>¿Necesitas asesoría técnica?</h2>
+            <p className={`mx-auto mt-4 sm:mt-6 max-w-[768px] ${t.bodyLg} text-gray-600`}>
+              Nuestro equipo de especialistas te ayuda a elegir el recubrimiento ideal para tu proyecto.
+              Cuéntanos brevemente lo que necesitas y nos pondremos en contacto contigo.
+            </p>
+          </div>
+
+          <div className="mt-10 sm:mt-12 grid gap-8 lg:gap-10 lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_500px]">
+            <form className="space-y-5 sm:space-y-6">
+              <div>
+                <label className={`mb-2 block ${t.label}`}>Nombre completo</label>
+                <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="Tu nombre completo" />
+              </div>
+              <div className="grid gap-5 sm:gap-6 sm:grid-cols-2">
+                <div>
+                  <label className={`mb-2 block ${t.label}`}>Correo electrónico</label>
+                  <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="ejemplo@correo.com" />
+                </div>
+                <div>
+                  <label className={`mb-2 block ${t.label}`}>Número telefónico <span className="font-normal text-sm">(Opcional)</span></label>
+                  <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="(55) 1234 5678" />
+                </div>
+              </div>
+              <div className="grid gap-5 sm:gap-6 sm:grid-cols-2">
+                <div>
+                  <label className={`mb-2 block ${t.label}`}>Nombre del proyecto</label>
+                  <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="Ej. Fachada corporativa en Guadalajara" />
+                </div>
+                <div>
+                  <label className={`mb-2 block ${t.label}`}>Tipo de superficie</label>
+                  <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="Concreto, metal, madera..." />
+                </div>
+              </div>
+              <div className="grid gap-5 sm:gap-6 sm:grid-cols-2">
+                <div>
+                  <label className={`mb-2 block ${t.label}`}>Ubicación del proyecto</label>
+                  <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="Ciudad o estado" />
+                </div>
+                <div>
+                  <label className={`mb-2 block ${t.label}`}>Etapa del proyecto</label>
+                  <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="Diseño, construcción, mantenimiento..." />
+                </div>
+              </div>
+              <div>
+                <label className={`mb-2 block ${t.label}`}>Mensaje <span className="font-normal text-sm">(opcional)</span></label>
+                <textarea rows={4} className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors resize-none" placeholder="Cuéntanos en qué podemos ayudarte..." />
+              </div>
+              <label className={`flex items-center gap-2 cursor-pointer ${t.bodySm}`}>
+                <input type="checkbox" className="h-[18px] w-[18px] shrink-0 accent-haikrom-red" />
+                Acepto términos y condiciones
+              </label>
+              <motion.button
+                type="submit"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+                className={`${t.label} bg-haikrom-red text-white px-10 sm:px-14 py-3 rounded-lg w-full sm:w-auto`}
+              >
+                Enviar
+              </motion.button>
+            </form>
+
+            <img
+              src={CONTACTO}
+              alt=""
+              className="hidden lg:block h-full min-h-[400px] w-full rounded-3xl object-cover"
+            />
+          </div>
+        </div>
       </section>
+
+      {/* ── Footer ──────────────────────────────────────────────────────────── */}
+      <footer className="relative overflow-hidden px-4 py-16 sm:py-20 text-haikrom-light md:px-16">
+        <img src={FOOTER_BG} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+        <div className="relative mx-auto max-w-[1280px]">
+
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+            {/* Navigation columns */}
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 sm:gap-10">
+              <img src={LOGO} alt="Haikrom" className="h-8 w-auto col-span-2 sm:col-span-1" />
+              {footerColumns.map((column) => (
+                <div key={column.title}>
+                  <h3 className={t.h6}>{column.title}</h3>
+                  <ul className={`mt-4 space-y-2 ${t.bodySm}`}>
+                    {column.links.map((link) => (
+                      <li key={link}>
+                        {link === 'Tendencias' ? (
+                          <button
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                            className="hover:underline text-left"
+                          >
+                            {link}
+                          </button>
+                        ) : link}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* Newsletter */}
+            <div className="rounded-lg bg-black/25 p-5 sm:p-6">
+              <h3 className={t.h6}>Suscribir</h3>
+              <p className={`mt-3 ${t.body}`}>Recibe actualizaciones sobre nuestras soluciones y proyectos.</p>
+              <div className="mt-5 sm:mt-6 flex flex-col gap-3 sm:flex-row">
+                <input
+                  className={`flex-1 min-w-0 border border-white bg-transparent p-3 ${t.body} placeholder:text-white/70 focus:outline-none`}
+                  placeholder="Ingresa tu correo"
+                />
+                <motion.button
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ duration: 0.15 }}
+                  className={`${t.label} bg-white/70 text-black px-6 py-3 rounded-sm whitespace-nowrap shrink-0`}
+                >
+                  Enviar
+                </motion.button>
+              </div>
+              <p className={`mt-3 ${t.caption} text-white/60`}>Al suscribirte, aceptas nuestra política de privacidad.</p>
+            </div>
+          </div>
+
+          <div className="my-8 h-px bg-white/40" />
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className={`flex flex-wrap gap-x-4 gap-y-2 ${t.bodySm} text-white/80`}>
+              <p>© 2026 Haikrom. Todos los derechos reservados.</p>
+              <a href="#" className="hover:underline">Política de privacidad</a>
+              <a href="#" className="hover:underline">Términos de servicio</a>
+              <a href="#" className="hover:underline">Configuración de cookies</a>
+            </div>
+            <div className="flex gap-4 shrink-0">
+              {SOCIAL_LINKS.map(({ label, Icon }) => (
+                <button
+                  key={label}
+                  aria-label={label}
+                  className="text-white/60 hover:text-white transition-colors duration-200"
+                >
+                  <Icon />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* ── Mobile Menu ─────────────────────────────────────────────────────── */}
+      <MobileMenu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onProductClick={(id) => {
+          setMenuOpen(false)
+          onNavigateToProduct?.(id)
+        }}
+        onSectionClick={(s) => {
+          setMenuOpen(false)
+          if (s !== 'Tendencias') onBack?.()
+        }}
+      />
 
     </motion.div>
   )
