@@ -20,7 +20,6 @@ export default {
       fontFamily: {
         'clash': ['Clash Display', 'sans-serif'],
         'montserrat': ['Montserrat', 'sans-serif'],
-        'roboto': ['Roboto', 'sans-serif'],
       },
     },
   },
