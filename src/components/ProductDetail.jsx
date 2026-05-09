@@ -4,6 +4,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 import Button from './Button'
 import MobileMenu from './MobileMenu'
+import Navbar from './Navbar'
 import { type as t, layout } from '../styles/tokens'
 
 // ─── Paint color swatches (27 colors, 3 × 9) ───────────────────────────────
@@ -270,22 +271,18 @@ export default function ProductDetail({ product, onBack, onNavigateToProduct }) 
   return (
     <div className="bg-white text-black">
 
+      {/* ── Fixed Navbar ──────────────────────────────────────────────────── */}
+      <Navbar
+        logo={ASSETS.logoLight}
+        onLogoClick={onBack}
+        onMenuOpen={() => setMenuOpen(true)}
+      />
+
       {/* ── Hero — full viewport height ──────────────────────────────────── */}
       <section
         className="relative min-h-screen"
         style={{ backgroundColor: product.bg || '#0e375d' }}
       >
-        {/* Full-width header overlay — sits above the flex row */}
-        <div className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-6 md:px-16 py-8 md:py-10">
-          <button
-            onClick={onBack}
-            aria-label="Volver al inicio"
-            className="text-white hover:text-white/80 transition-colors"
-          >
-            <img src={ASSETS.logoLight} alt="Haikrom" className="h-8 md:h-[50px] w-auto" />
-          </button>
-          <HamburgerBtn onClick={() => setMenuOpen(true)} />
-        </div>
 
         {/* Desktop flex row: left image | right content */}
         <div className="hidden lg:flex min-h-screen">

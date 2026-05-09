@@ -4,6 +4,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 import Btn from '../components/Btn'
 import MobileMenu from '../components/MobileMenu'
+import Navbar from '../components/Navbar'
 import { SOCIAL_LINKS } from '../components/SocialIcons'
 import { LOGO, footerColumns } from '../data/site'
 import { type as t } from '../styles/tokens'
@@ -167,26 +168,12 @@ export default function Tendencias({ onBack, onNavigateToProduct }) {
       className="bg-white"
     >
 
-      {/* ── Fixed Header ───────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-5 md:px-16">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
-        <button
-          onClick={onBack}
-          aria-label="Ir al inicio"
-          className="relative hover:opacity-75 transition-opacity"
-        >
-          <img src={LOGO} alt="Haikrom" className="h-9 w-auto sm:h-10 md:h-[50px]" />
-        </button>
-        <button
-          aria-label="Abrir menú"
-          onClick={() => setMenuOpen(true)}
-          className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px]"
-        >
-          <span className="block w-6 h-0.5 bg-white rounded-full" />
-          <span className="block w-6 h-0.5 bg-white rounded-full" />
-          <span className="block w-6 h-0.5 bg-white rounded-full" />
-        </button>
-      </header>
+      {/* ── Fixed Navbar ───────────────────────────────────────────────────── */}
+      <Navbar
+        logo={LOGO}
+        onLogoClick={onBack}
+        onMenuOpen={() => setMenuOpen(true)}
+      />
 
       {/* ── Hero — Full-screen video ─────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col overflow-hidden">

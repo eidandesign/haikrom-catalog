@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import MobileMenu from './components/MobileMenu'
+import Navbar from './components/Navbar'
 import ProductDetail from './components/ProductDetail'
 import ComponentLibrary from './pages/ComponentLibrary'
 import Tendencias from './pages/Tendencias'
@@ -609,6 +610,22 @@ export default function App() {
   return (
     <div className="bg-white text-black">
 
+      {/* ── Fixed Navbar ── */}
+      <Navbar
+        logo={assets.logoLight}
+        onLogoClick={() => {}}
+        onMenuOpen={() => setMenuOpen(true)}
+        leftSlot={
+          <button
+            onClick={() => setShowLibrary(true)}
+            className={`${t.caption} text-white/60 hover:text-white transition`}
+            title="View Design System"
+          >
+            ◆ Design
+          </button>
+        }
+      />
+
       {/* ── Hero ── */}
       <section className="relative h-screen px-4 py-10 md:px-16">
         <video
@@ -619,26 +636,7 @@ export default function App() {
           loop
           playsInline
         />
-        <div className="relative h-full mx-auto flex w-full max-w-[1312px] flex-col justify-between">
-          <header className="flex items-center justify-between">
-            <button
-              onClick={() => setShowLibrary(true)}
-              className={`${t.caption} text-white/60 hover:text-white transition`}
-              title="View Design System"
-            >
-              ◆ Design
-            </button>
-            <img src={assets.logoLight} alt="Haikrom" className="h-10 w-auto md:h-[50px]" />
-            <button
-              aria-label="Abrir menú"
-              onClick={() => setMenuOpen(true)}
-              className="w-8 h-8 flex flex-col items-center justify-center gap-[5px]"
-            >
-              <span className="block w-6 h-0.5 bg-white rounded-full" />
-              <span className="block w-6 h-0.5 bg-white rounded-full" />
-              <span className="block w-6 h-0.5 bg-white rounded-full" />
-            </button>
-          </header>
+        <div className="relative h-full mx-auto flex w-full max-w-[1312px] flex-col justify-end">
 
           <div
             className="flex flex-col gap-4 pb-6"
