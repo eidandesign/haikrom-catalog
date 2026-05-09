@@ -78,10 +78,21 @@ src/
 │   ├── Tendencias.jsx         → Página de tendencias (acceso: /#tendencias)
 │   └── ComponentLibrary.jsx   → Design system vivo (acceso: /#design-system)
 └── components/
+    ├── Btn.jsx                → Botón compartido (motion.button + variantes primary/outline/secondary)
     ├── ProductDetail.jsx      → Página de producto (acceso: /#product/{id})
     ├── MobileMenu.jsx         → Menú lateral animado (Framer Motion)
     └── SocialIcons.jsx        → Íconos SVG redes sociales + SOCIAL_LINKS array
 ```
+
+### `src/components/Btn.jsx`
+```jsx
+import Btn from './components/Btn'
+// variants: 'primary' | 'outline' | 'secondary'
+<Btn variant="primary" onClick={fn} className="w-full">Label</Btn>
+```
+- Encapsula `motion.button` con `whileHover={{ y: -3 }}` y `whileTap={{ scale: 0.96 }}`
+- Usa `t.label` del token system
+- Soporta `type`, `onClick`, `disabled`, `className`, `...rest`
 
 ## Navegación (hash-based routing en App.jsx)
 | URL                           | Vista                   |
@@ -111,12 +122,16 @@ El logo en todas las páginas llama a `onBack()` para volver al home.
 
 ### Paletas interactivas (PaletteCard)
 - Al hacer clic en una tarjeta → crossfade animado al `image` de esa paleta
-- Estado activo: fondo más oscuro + borde blanco `rgba(255,255,255,0.70)`
-- Arquitectura lista para imágenes distintas por paleta: agregar campo `image` en cada entrada de `palettes[]`
-- Scroll horizontal en móvil (`overflow-x-auto`)
+- Estado activo: fondo sólido `#f9f6f4` + outline `2px solid rgba(255,255,255,0.70)` + texto `#0e375d`
+- Estado inactivo: fondo `rgba(249,246,244,0.24)` + texto `#fffcfb` + backdrop-blur
+- Border-radius 12px, `backdrop-blur-[3.75px]`
+- Scroll horizontal en móvil (`overflow-x-auto`), padding `py-2` en el contenedor para evitar clipping en hover
+- Cada paleta lleva su propio campo `image` — actualizar ese campo para cambiar la imagen de fondo
 
 ### Imágenes de tendencias (PNG)
-- `/images/tendencias_1.png` — Arquitectura natural y orgánica
+- `/images/tendencias_1.png` — Arquitectura natural y orgánica (paleta Tierra Viva)
+- `/images/tendencias_1_2.png` — Arquitectura natural y orgánica (paleta Verde Suave)
+- `/images/tendencias_1_3.png` — Arquitectura natural y orgánica (paleta Luz Natural)
 - `/images/tendencias_2.png` — Frescura moderna
 - `/images/tendencias_3.png` — Espacios Luminosos
 - `/images/tendencias_header.png` — Fallback del video hero
@@ -186,7 +201,15 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - [x] Logo clickeable en todas las páginas → navega al home
 - [x] Datos compartidos extraídos (SocialIcons.jsx, site.js)
 - [x] Clash Display self-hosted (woff2 en /public/fonts/ClashDisplay/, @font-face en index.css)
-- [ ] Imágenes distintas por paleta de color (actualmente todas apuntan a la misma PNG)
+- [x] Btn.jsx compartido — extrae motion.button con variantes (primary/outline/secondary)
+- [x] ProductRow layout móvil — imagen 304px arriba, info abajo, botones full-width
+- [x] AOS scroll animations en mobile (ProductRow + Tendencias)
+- [x] Casos de éxito responsive en mobile (min-h en lugar de h fija)
+- [x] Botón Enviar full-width en mobile (`w-full sm:w-auto`)
+- [x] PaletteCard rediseño Figma: cream semi-transparente / sólido activo, backdrop-blur, border-radius 12px
+- [x] Imágenes distintas por paleta en tendencias_1 (Verde Suave: _1_2.png, Luz Natural: _1_3.png)
+- [x] vercel.json con security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
+- [x] AOS global duration: 800ms en AOS.init (App.jsx) — no repetir data-aos-duration="800" en cada elemento
 - [ ] URLs reales para redes sociales (actualmente href="#")
 - [ ] Subir a Vercel
 
@@ -196,6 +219,9 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - Colores directos con `#hex` o `bg-[#hex]` solo cuando no hay clase Tailwind disponible
 - El token `t.overline` se usa para eyebrows, section labels Y callout labels
 - El token `t.label` cubre button text Y form labels — es el mismo estilo
-- Animaciones de entrada: AOS (`data-aos="fade-up"`) para scroll reveals
+- Animaciones de entrada: AOS (`data-aos="fade-up"`) para scroll reveals — duración global 800ms en `AOS.init`, no repetir `data-aos-duration="800"` en cada elemento
 - Animaciones de interacción: Framer Motion (`motion.button`, `AnimatePresence`) para hover/tap
+- Botones: usar siempre `<Btn variant="...">` en lugar de `motion.button` directo
 - Videos: `autoPlay muted loop playsInline` + atributo `poster` como fallback visual
+- Formularios: siempre incluir `onSubmit={(e) => e.preventDefault()}` para evitar recarga de página
+- Vercel: `vercel.json` en la raíz con security headers para todas las rutas
