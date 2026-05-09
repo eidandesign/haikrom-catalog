@@ -210,8 +210,37 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - [x] Imágenes distintas por paleta en tendencias_1 (Verde Suave: _1_2.png, Luz Natural: _1_3.png)
 - [x] vercel.json con security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
 - [x] AOS global duration: 800ms en AOS.init (App.jsx) — no repetir data-aos-duration="800" en cada elemento
+- [x] Navbar sticky con scroll direction detection (useScrollDirection hook + Navbar.jsx)
+  - Fijo en top, se oculta al bajar, reaparece al subir
+  - Background: gradiente transparente en top → azul marino opaco + blur cuando se scrollea
+  - Animación suave con Framer Motion (`y: -120` al ocultarse)
+  - Implementado en Home, Tendencias, ProductDetail
 - [ ] URLs reales para redes sociales (actualmente href="#")
 - [ ] Subir a Vercel
+
+## Componentes clave
+
+### Navbar (`src/components/Navbar.jsx`)
+```jsx
+<Navbar
+  logo={logoUrl}
+  onLogoClick={handleLogoClick}
+  onMenuOpen={handleMenuOpen}
+  leftSlot={optionalElement}  // e.g., Design button (Home only)
+/>
+```
+- Props: `logo`, `onLogoClick`, `onMenuOpen`, `leftSlot` (opcional)
+- Usa hook `useScrollDirection()` para detectar dirección de scroll
+- Transiciones automáticas: se oculta al bajar, aparece al subir
+- Fondo dinámico: gradiente en top, blur+color cuando scrolleado
+
+### useScrollDirection (`src/hooks/useScrollDirection.js`)
+```js
+const { visible, scrolled } = useScrollDirection(threshold = 8)
+```
+- `visible`: boolean — mostrar navbar (true si scrolling up o cerca del top)
+- `scrolled`: boolean — true si `scrollY > 60` (para cambiar estilo fondo)
+- `threshold`: píxeles mínimos de movimiento para detectar dirección (default 8)
 
 ## Convenciones
 - **Nunca** hardcodear clases de fuente o tamaño de texto — usar siempre `t.*` de tokens.js
@@ -222,6 +251,7 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - Animaciones de entrada: AOS (`data-aos="fade-up"`) para scroll reveals — duración global 800ms en `AOS.init`, no repetir `data-aos-duration="800"` en cada elemento
 - Animaciones de interacción: Framer Motion (`motion.button`, `AnimatePresence`) para hover/tap
 - Botones: usar siempre `<Btn variant="...">` en lugar de `motion.button` directo
+- Navbar: usar `<Navbar>` compartido en lugar de headers inline — incluir `leftSlot` solo en Home
 - Videos: `autoPlay muted loop playsInline` + atributo `poster` como fallback visual
 - Formularios: siempre incluir `onSubmit={(e) => e.preventDefault()}` para evitar recarga de página
 - Vercel: `vercel.json` en la raíz con security headers para todas las rutas
