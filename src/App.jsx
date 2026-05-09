@@ -6,6 +6,7 @@ import MobileMenu from './components/MobileMenu'
 import ProductDetail from './components/ProductDetail'
 import ComponentLibrary from './pages/ComponentLibrary'
 import Tendencias from './pages/Tendencias'
+import Btn from './components/Btn'
 import { SOCIAL_LINKS } from './components/SocialIcons'
 import { footerColumns } from './data/site'
 import { type as t, layout } from './styles/tokens'
@@ -190,22 +191,6 @@ const trends = [
 
 const EASE = [0.4, 0, 0.2, 1]
 
-function Btn({ children, variant = 'primary', className = '', type = 'button', onClick, disabled, ...rest }) {
-  return (
-    <motion.button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      whileHover={disabled ? {} : { y: -3 }}
-      whileTap={disabled ? {} : { scale: 0.96, y: 0 }}
-      transition={{ duration: 0.15, ease: 'easeOut' }}
-      className={`btn btn-${variant} inline-flex items-center justify-center px-4 py-2 rounded-[8px] ${t.label} ${className}`}
-      {...rest}
-    >
-      {children}
-    </motion.button>
-  )
-}
 
 function ChevronDown() {
   return (
@@ -230,11 +215,102 @@ function Arrow() {
 function ProductRow({ row, isOpen, onToggle, onViewProduct }) {
   return (
     <article className={`${row.bg} ${row.textClass}`}>
-      <div className={`flex pr-4 md:pr-0 gap-20 pl-4 md:pl-20 ${isOpen ? 'items-start' : 'items-center'}`}>
+
+      {/* ── MOBILE LAYOUT ─────────────────────────────────────────── */}
+      <div className="md:hidden flex flex-col">
+
+        {/* Image — 304px fija */}
+        <div
+          className="relative h-[304px] shrink-0 overflow-hidden"
+          data-aos="fade-up"
+        >
+          <img
+            src={row.image}
+            alt={row.name}
+            className="absolute inset-0 w-full h-full object-cover opacity-80"
+          />
+        </div>
+
+        {/* Contenido */}
+        <div
+          className="flex flex-col gap-4 px-8 pt-6 pb-8"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          data-aos-delay="100"
+        >
+          <p className={t.body}>{row.tag}</p>
+          <h2 className={t.h3}>{row.name}</h2>
+
+          {/* Botón Ver más (colapsado) */}
+          <AnimatePresence initial={false}>
+            {!isOpen && (
+              <motion.button
+                key="ver-mas-mobile"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onToggle}
+                className={`flex items-center gap-2 ${t.body} w-fit`}
+              >
+                Ver más <ChevronDown />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          {/* Contenido expandido */}
+          <motion.div
+            initial={false}
+            animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+            transition={{
+              height: { duration: 0.55, ease: EASE },
+              opacity: { duration: 0.3, delay: isOpen ? 0.15 : 0 },
+            }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div className="flex flex-col gap-4">
+              <p className={t.bodyLg}>{row.description}</p>
+
+              <div className="flex flex-col gap-4 py-4">
+                <h3 className={t.h5}>Usos</h3>
+                <div className="flex flex-wrap gap-4">
+                  {row.usos.map((uso) => (
+                    <span
+                      key={uso}
+                      style={{ backgroundColor: row.tagBg }}
+                      className={`${t.body} text-white rounded-[32px] px-4 py-1 whitespace-nowrap`}
+                    >
+                      {uso}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Botones full-width */}
+              <div className="flex flex-col gap-4 w-full">
+                <Btn variant="outline" className="w-full">Descargar Ficha Técnica</Btn>
+                <Btn variant="primary" onClick={() => onViewProduct(row)} className="w-full">Ver Producto</Btn>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={onToggle}
+                className={`flex items-center gap-2 ${t.body} w-fit mt-2`}
+              >
+                Ver menos <ChevronUp />
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── DESKTOP LAYOUT ────────────────────────────────────────── */}
+      <div className={`hidden md:flex pr-0 gap-20 pl-20 ${isOpen ? 'items-start' : 'items-center'}`}>
 
         {/* Left column */}
         <motion.div
-          className="w-full md:w-[600px] shrink-0 flex flex-col"
+          className="w-[600px] shrink-0 flex flex-col"
           animate={{
             paddingTop: isOpen ? 64 : 152,
             paddingBottom: isOpen ? 64 : 152,
@@ -321,8 +397,8 @@ function ProductRow({ row, isOpen, onToggle, onViewProduct }) {
           </div>
         </motion.div>
 
-        {/* Right column — hidden on mobile */}
-        <div className="hidden md:flex flex-1 self-stretch relative overflow-hidden min-h-[304px] opacity-80">
+        {/* Right column — imagen */}
+        <div className="flex flex-1 self-stretch relative overflow-hidden min-h-[304px] opacity-80">
           <img
             src={row.image}
             alt={row.name}
@@ -346,7 +422,7 @@ function BeneficiosSection() {
   }, [])
 
   return (
-    <section className="px-4 py-12 md:px-16 md:py-4" data-aos="fade-up" data-aos-duration="800">
+    <section className="px-4 py-12 md:px-16 md:py-4" data-aos="fade-up">
       <div className="mx-auto max-w-[1312px] flex flex-col items-center gap-12 py-16">
 
         <div className="flex flex-col items-center gap-4 text-center max-w-[768px]">
@@ -447,12 +523,13 @@ function initFromHash() {
 export default function App() {
   const [openRow, setOpenRow] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [currentProduct, setCurrentProduct] = useState(() => initFromHash().product)
-  const [showLibrary, setShowLibrary] = useState(() => initFromHash().showLibrary)
-  const [showTendencias, setShowTendencias] = useState(() => initFromHash().showTendencias)
+  const [{ product: _p, showLibrary: _l, showTendencias: _t }] = useState(initFromHash)
+  const [currentProduct, setCurrentProduct] = useState(_p)
+  const [showLibrary,    setShowLibrary]     = useState(_l)
+  const [showTendencias, setShowTendencias]  = useState(_t)
 
   useEffect(() => {
-    AOS.init({ once: true, easing: 'ease-out-cubic', offset: 60 })
+    AOS.init({ once: true, easing: 'ease-out-cubic', offset: 60, duration: 800 })
   }, [])
 
   useEffect(() => {
@@ -566,7 +643,7 @@ export default function App() {
           <div
             className="flex flex-col gap-4 pb-6"
             data-aos="fade-up"
-            data-aos-duration="800"
+           
             data-aos-delay="300"
             data-aos-offset="0"
           >
@@ -604,18 +681,18 @@ export default function App() {
       {/* ── Casos de éxito ── */}
       <section className="px-4 py-16 md:px-16">
         <div className="mx-auto max-w-[1280px]">
-          <div className="mx-auto max-w-[768px] text-center" data-aos="fade-up" data-aos-duration="800">
+          <div className="mx-auto max-w-[768px] text-center" data-aos="fade-up">
             <h2 className={`${t.h2} text-haikrom-dark-blue`}>Casos de éxito</h2>
             <p className={`mt-2 ${t.bodyLg}`}>Proyectos que transformamos con nuestra tecnología de pintura</p>
           </div>
           <article
-            className="relative mt-12 h-[500px] md:h-[660px] overflow-hidden rounded-lg text-haikrom-light"
+            className="relative mt-12 min-h-[500px] md:h-[660px] overflow-hidden rounded-lg text-haikrom-light"
             data-aos="fade-up"
-            data-aos-duration="800"
+           
             data-aos-delay="150"
           >
             <img src={assets.caseStudy} alt="" className="absolute inset-0 h-full w-full object-cover" />
-            <div className="relative flex h-full flex-col justify-between p-6 md:p-12">
+            <div className="relative flex min-h-[500px] md:min-h-0 md:h-full flex-col justify-between p-6 md:p-12">
               <div className="max-w-[391px]">
                 <h3 className={t.h3}>Color, protección y estética en arquitectura contemporánea.</h3>
                 <p className={`mt-4 ${t.bodyLg}`}>
@@ -640,7 +717,7 @@ export default function App() {
       {/* ── Tendencias ── */}
       <section className="px-4 pt-40 pb-16 md:px-16">
         <div className="relative mx-auto max-w-[1280px]">
-          <div className="mx-auto max-w-[768px] text-center" data-aos="fade-up" data-aos-duration="800">
+          <div className="mx-auto max-w-[768px] text-center" data-aos="fade-up">
             <h2 className={`${t.h2} text-haikrom-dark-blue`}>Tendencias Arquitectónicas</h2>
             <p className={`mt-2 ${t.bodyLg}`}>El color que define la arquitectura contemporánea.</p>
           </div>
@@ -650,7 +727,7 @@ export default function App() {
                 key={trend.title}
                 className="group relative min-h-[280px] overflow-hidden flex items-center px-6 py-10 text-haikrom-light md:px-16"
                 data-aos="fade-up"
-                data-aos-duration="800"
+               
                 data-aos-delay={i * 100}
               >
                 <img
@@ -677,7 +754,7 @@ export default function App() {
       {/* ── Contacto ── */}
       <section className="px-4 py-16 md:px-16">
         <div className="mx-auto max-w-[1280px]">
-          <div className="text-center" data-aos="fade-up" data-aos-duration="800">
+          <div className="text-center" data-aos="fade-up">
             <p className={t.overline}>Contacto</p>
             <h2 className={`mt-2 ${t.h2} text-haikrom-dark-blue`}>¿Necesitas asesoría técnica?</h2>
             <p className={`mx-auto mt-6 max-w-[768px] ${t.bodyLg}`}>
@@ -686,7 +763,7 @@ export default function App() {
           </div>
 
           <div className="mt-12 grid gap-10 lg:grid-cols-[680px_1fr]">
-            <form className="space-y-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+            <form className="space-y-6" data-aos="fade-up" data-aos-delay="150" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className={`mb-2 block ${t.label}`}>Nombre completo</label>
                 <input className="w-full rounded-lg border border-black p-3" placeholder="Tu nombre completo" />
@@ -728,7 +805,7 @@ export default function App() {
               <label className={`flex items-center gap-2 ${t.bodySm}`}>
                 <input type="checkbox" className="h-[18px] w-[18px]" /> Acepto términos y condiciones
               </label>
-              <Btn variant="primary" type="submit" className="px-14">
+              <Btn variant="primary" type="submit" className="w-full sm:w-auto px-14">
                 Enviar
               </Btn>
             </form>
@@ -738,7 +815,7 @@ export default function App() {
               alt=""
               className="h-full min-h-[400px] w-full rounded-3xl object-cover"
               data-aos="fade-up"
-              data-aos-duration="800"
+             
               data-aos-delay="250"
             />
           </div>
@@ -749,7 +826,7 @@ export default function App() {
       <footer
         className="relative overflow-hidden px-4 py-20 text-haikrom-light md:px-16"
         data-aos="fade-up"
-        data-aos-duration="800"
+       
       >
         <img src={assets.creditsBg} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="relative mx-auto max-w-[1280px]">

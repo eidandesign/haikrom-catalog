@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+import Btn from '../components/Btn'
 import MobileMenu from '../components/MobileMenu'
 import { SOCIAL_LINKS } from '../components/SocialIcons'
 import { LOGO, footerColumns } from '../data/site'
@@ -22,8 +25,8 @@ const trends = [
     image: '/images/tendencias_1.png',
     palettes: [
       { name: 'Tierra Viva',  swatches: ['#baa58d', '#e1a6ad', '#947d6f'], image: '/images/tendencias_1.png' },
-      { name: 'Verde Suave',  swatches: ['#6ba539', '#c3dc93', '#a0dab3'], image: '/images/tendencias_1.png' },
-      { name: 'Luz Natural',  swatches: ['#9b2242', '#b8ccea', '#63666a'], image: '/images/tendencias_1.png' },
+      { name: 'Verde Suave',  swatches: ['#6ba539', '#c3dc93', '#a0dab3'], image: '/images/tendencias_1_2.png' },
+      { name: 'Luz Natural',  swatches: ['#9b2242', '#b8ccea', '#63666a'], image: '/images/tendencias_1_3.png' },
     ],
   },
   {
@@ -61,14 +64,14 @@ function PaletteCard({ name, swatches, isActive, onClick }) {
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.15, ease: 'easeOut' }}
-      className="rounded-[4px] p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 shrink-0 w-[200px] sm:w-[240px] lg:w-[270px] text-left"
+      className="rounded-[12px] p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 shrink-0 w-[200px] sm:w-[240px] lg:w-[270px] text-left backdrop-blur-[3.75px]"
       style={{
-        backgroundColor: isActive ? 'rgba(0,0,0,0.70)' : 'rgba(0,0,0,0.51)',
+        backgroundColor: isActive ? '#f9f6f4' : 'rgba(249,246,244,0.24)',
         outline: isActive ? '2px solid rgba(255,255,255,0.70)' : '2px solid transparent',
         outlineOffset: '-2px',
       }}
     >
-      <p className={`${t.body} sm:text-xl text-white whitespace-nowrap`}>{name}</p>
+      <p className={`${t.body} sm:text-xl whitespace-nowrap`} style={{ color: isActive ? '#0e375d' : '#fffcfb' }}>{name}</p>
       <div className="grid grid-cols-3 gap-3 sm:gap-6 h-9 sm:h-11">
         {swatches.map((color, i) => (
           <div
@@ -116,22 +119,22 @@ function TrendSection({ trend, onVerProducto }) {
       <div className="relative flex flex-col justify-end min-h-screen px-4 pb-8 sm:pb-10 md:px-16 gap-4 sm:gap-6 pt-20">
 
         {/* Text + CTA */}
-        <div className="flex flex-col gap-4 sm:gap-6 max-w-full sm:max-w-[586px]">
+        <div
+          className="flex flex-col gap-4 sm:gap-6 max-w-full sm:max-w-[586px]"
+          data-aos="fade-up"
+        >
           <h2 className={`${t.h3} text-haikrom-light`}>{trend.title}</h2>
           <p className={`${t.body} sm:text-xl text-haikrom-light/90`}>{trend.copy}</p>
-          <motion.button
-            onClick={onVerProducto}
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            className={`${t.label} bg-haikrom-red text-white px-6 py-2.5 rounded-lg w-fit`}
-          >
-            Ver Producto
-          </motion.button>
+          <Btn variant="primary" onClick={onVerProducto} className="px-6 py-2.5 w-fit">Ver Producto</Btn>
         </div>
 
         {/* Palette cards — horizontal scroll on mobile */}
-        <div className="flex gap-3 sm:gap-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none">
+        <div
+          className="flex gap-3 sm:gap-6 overflow-x-auto py-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none"
+          data-aos="fade-up"
+          data-aos-duration="700"
+          data-aos-delay="100"
+        >
           {trend.palettes.map((p, i) => (
             <PaletteCard
               key={p.name}
@@ -150,6 +153,10 @@ function TrendSection({ trend, onVerProducto }) {
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function Tendencias({ onBack, onNavigateToProduct }) {
   const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    AOS.refresh()
+  }, [])
 
   return (
     <motion.div
@@ -197,7 +204,11 @@ export default function Tendencias({ onBack, onNavigateToProduct }) {
 
         {/* Text — bottom-right anchor, left-aligned text */}
         <div className="relative flex flex-col items-end justify-end min-h-screen px-4 pb-10 sm:pb-14 md:px-16 pt-20">
-          <div className="flex flex-col gap-4 sm:gap-8 w-full sm:max-w-[479px] text-left">
+          <div
+            className="flex flex-col gap-4 sm:gap-8 w-full sm:max-w-[479px] text-left"
+            data-aos="fade-up"
+                       data-aos-delay="200"
+          >
             <h2 className={`${t.h2} text-haikrom-light`}>
               El color es nuestro lenguaje.
             </h2>
@@ -222,7 +233,7 @@ export default function Tendencias({ onBack, onNavigateToProduct }) {
       {/* ── Contacto ────────────────────────────────────────────────────────── */}
       <section className="px-4 py-12 sm:py-16 md:px-16">
         <div className="mx-auto max-w-[1280px]">
-          <div className="text-center">
+          <div className="text-center" data-aos="fade-up">
             <p className={`${t.overline} text-haikrom-dark-blue/60`}>Contacto</p>
             <h2 className={`mt-2 ${t.h2} text-haikrom-dark-blue`}>¿Necesitas asesoría técnica?</h2>
             <p className={`mx-auto mt-4 sm:mt-6 max-w-[768px] ${t.bodyLg} text-gray-600`}>
@@ -232,7 +243,7 @@ export default function Tendencias({ onBack, onNavigateToProduct }) {
           </div>
 
           <div className="mt-10 sm:mt-12 grid gap-8 lg:gap-10 lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_500px]">
-            <form className="space-y-5 sm:space-y-6">
+            <form className="space-y-5 sm:space-y-6" data-aos="fade-up" data-aos-delay="150" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className={`mb-2 block ${t.label}`}>Nombre completo</label>
                 <input className="w-full rounded-lg border border-black/30 p-3 focus:outline-none focus:border-haikrom-dark-blue transition-colors" placeholder="Tu nombre completo" />
@@ -275,15 +286,7 @@ export default function Tendencias({ onBack, onNavigateToProduct }) {
                 <input type="checkbox" className="h-[18px] w-[18px] shrink-0 accent-haikrom-red" />
                 Acepto términos y condiciones
               </label>
-              <motion.button
-                type="submit"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15, ease: 'easeOut' }}
-                className={`${t.label} bg-haikrom-red text-white px-10 sm:px-14 py-3 rounded-lg w-full sm:w-auto`}
-              >
-                Enviar
-              </motion.button>
+              <Btn variant="primary" type="submit" className="w-full sm:w-auto px-10 sm:px-14 py-3">Enviar</Btn>
             </form>
 
             <img
@@ -335,14 +338,7 @@ export default function Tendencias({ onBack, onNavigateToProduct }) {
                   className={`flex-1 min-w-0 border border-white bg-transparent p-3 ${t.body} placeholder:text-white/70 focus:outline-none`}
                   placeholder="Ingresa tu correo"
                 />
-                <motion.button
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ duration: 0.15 }}
-                  className={`${t.label} bg-white/70 text-black px-6 py-3 rounded-sm whitespace-nowrap shrink-0`}
-                >
-                  Enviar
-                </motion.button>
+                <Btn variant="secondary" className="px-6 py-3 rounded-sm whitespace-nowrap shrink-0">Enviar</Btn>
               </div>
               <p className={`mt-3 ${t.caption} text-white/60`}>Al suscribirte, aceptas nuestra política de privacidad.</p>
             </div>
