@@ -221,7 +221,7 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - [x] DesignSystem.jsx (legacy `?ds`) eliminado — ComponentLibrary en `/#design-system` es el único design system
 - [x] Button.jsx eliminado — ProductDetail migrado a `<Btn size="lg">`; `Btn` ahora soporta `size` (sm/md/lg)
 - [ ] URLs reales para redes sociales (actualmente href="#")
-- [ ] Subir a Vercel
+- [x] Deploy en Vercel → https://haikrom-catalog.vercel.app (proyecto `noflagbrand/haikrom-catalog`, security headers verificados)
 
 ## Componentes clave
 
