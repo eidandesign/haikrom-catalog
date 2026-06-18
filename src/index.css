@@ -28,8 +28,7 @@
   font-display: swap;
 }
 
-/* ── Montserrat — Google Fonts CDN ───────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+/* Montserrat se carga vía <link> en index.html (con preconnect) — no @import aquí */
 
 @tailwind base;
 @tailwind components;
