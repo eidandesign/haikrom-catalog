@@ -88,11 +88,13 @@ src/
 ```jsx
 import Btn from './components/Btn'
 // variants: 'primary' | 'outline' | 'secondary'
-<Btn variant="primary" onClick={fn} className="w-full">Label</Btn>
+// sizes:    'sm' | 'md' (default) | 'lg'
+<Btn variant="primary" size="lg" onClick={fn} className="w-full">Label</Btn>
 ```
 - Encapsula `motion.button` con `whileHover={{ y: -3 }}` y `whileTap={{ scale: 0.96 }}`
-- Usa `t.label` del token system
+- Usa `t.label` del token system (18px). `size` ajusta padding/texto: `sm` (text-sm), `md` (18px), `lg` (text-xl). El `!` en sm/lg gana sobre el `text-[18px]` de `t.label`
 - Soporta `type`, `onClick`, `disabled`, `className`, `...rest`
+- **Es el único botón** — `Button.jsx` fue eliminado; usar siempre `Btn`
 
 ## Navegación (hash-based routing en App.jsx)
 | URL                           | Vista                   |
@@ -215,6 +217,9 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
   - Background: gradiente transparente en top → azul marino opaco + blur cuando se scrollea
   - Animación suave con Framer Motion (`y: -120` al ocultarse)
   - Implementado en Home, Tendencias, ProductDetail
+- [x] Limpieza de código muerto: eliminados Header.jsx, Footer.jsx, ProductCard.jsx, Filters.jsx (sin usar)
+- [x] DesignSystem.jsx (legacy `?ds`) eliminado — ComponentLibrary en `/#design-system` es el único design system
+- [x] Button.jsx eliminado — ProductDetail migrado a `<Btn size="lg">`; `Btn` ahora soporta `size` (sm/md/lg)
 - [ ] URLs reales para redes sociales (actualmente href="#")
 - [ ] Subir a Vercel
 

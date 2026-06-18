@@ -27,3 +27,7 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Claude Code worktrees + stray font duplicates (canonical fonts live in public/fonts/)
+.claude/worktrees/
+/Fonts/

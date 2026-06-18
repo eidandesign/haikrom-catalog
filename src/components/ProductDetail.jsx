@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import Button from './Button'
+import Btn from './Btn'
 import MobileMenu from './MobileMenu'
 import Navbar from './Navbar'
 import { type as t, layout } from '../styles/tokens'
@@ -171,9 +171,9 @@ function ContactSection() {
               Acepto términos y condiciones
             </label>
             <div>
-              <Button variant="primary" type="submit" className="px-14">
+              <Btn variant="primary" type="submit" className="px-14">
                 Enviar
-              </Button>
+              </Btn>
             </div>
           </form>
 
@@ -223,7 +223,7 @@ function FooterSection() {
                 className={`flex-1 border border-white bg-transparent p-3 ${t.body} placeholder:text-white/70 focus:outline-none`}
                 placeholder="Ingresa tu correo"
               />
-              <Button variant="secondary" className="rounded-sm shrink-0">Enviar</Button>
+              <Btn variant="secondary" className="rounded-sm shrink-0">Enviar</Btn>
             </div>
             <p className={`mt-3 ${t.caption}`}>
               Al suscribirte, aceptas nuestra política de privacidad.
@@ -355,9 +355,9 @@ export default function ProductDetail({ product, onBack, onNavigateToProduct }) 
 
             {/* CTA */}
             <div>
-              <Button variant="primary" size="lg">
+              <Btn variant="primary" size="lg">
                 Descargar Ficha Técnica
-              </Button>
+              </Btn>
             </div>
           </div>{/* end content inner */}
             </div>{/* end justify-center */}
@@ -399,7 +399,7 @@ export default function ProductDetail({ product, onBack, onNavigateToProduct }) 
                 ))}
               </div>
             </div>
-            <div><Button variant="primary" size="lg">Descargar Ficha Técnica</Button></div>
+            <div><Btn variant="primary" size="lg">Descargar Ficha Técnica</Btn></div>
           </div>
         </div>
       </section>
@@ -476,9 +476,9 @@ export default function ProductDetail({ product, onBack, onNavigateToProduct }) 
 
             {/* Buy CTA */}
             <div>
-              <Button variant="primary" size="lg">
+              <Btn variant="primary" size="lg">
                 Comprar
-              </Button>
+              </Btn>
             </div>
           </div>
 
