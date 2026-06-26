@@ -615,15 +615,6 @@ export default function App() {
         logo={assets.logoLight}
         onLogoClick={() => {}}
         onMenuOpen={() => setMenuOpen(true)}
-        leftSlot={
-          <button
-            onClick={() => setShowLibrary(true)}
-            className={`${t.caption} text-white/60 hover:text-white transition`}
-            title="View Design System"
-          >
-            ◆ Design
-          </button>
-        }
       />
 
       {/* ── Hero ── */}
