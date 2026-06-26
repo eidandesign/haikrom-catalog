@@ -5,7 +5,7 @@ Empresa de pinturas y recubrimientos arquitectónicos. Sitio web tipo landing + 
 ## Stack
 - React + Vite + Tailwind CSS
 - Sin backend (datos en JSON)
-- Deploy target: Vercel
+- Deploy: Vercel (en producción) → **https://www.haikrom.com** (ver sección "Producción y dominio")
 
 ## Colores (definidos en tailwind.config.js)
 - haikrom-dark-blue: #0e375d
@@ -222,6 +222,30 @@ Página viva en `/#design-system` que documenta y renderiza en tiempo real:
 - [x] Button.jsx eliminado — ProductDetail migrado a `<Btn size="lg">`; `Btn` ahora soporta `size` (sm/md/lg)
 - [ ] URLs reales para redes sociales (actualmente href="#")
 - [x] Deploy en Vercel → https://haikrom-catalog.vercel.app (proyecto `noflagbrand/haikrom-catalog`, security headers verificados)
+- [x] Dominio propio conectado → **https://www.haikrom.com** (canónico) + haikrom.mx (ver sección "Producción y dominio")
+- [x] Preflight de producción (SEO + social):
+  - Favicon de marca `public/favicon.svg` (ícono K Haikrom blanco sobre `#0e375d`) — reemplazó `vite.svg`
+  - `<title>` + `meta description` optimizados en `index.html`
+  - Open Graph + Twitter Card con `public/images/og-image.jpg` (1200×630, tarjeta de marca)
+  - `link rel="canonical"` + `theme-color` en `index.html`
+  - `public/robots.txt` + `public/sitemap.xml` (apuntan a https://www.haikrom.com)
+
+## Producción y dominio
+
+- **Hosting:** Vercel (no GoDaddy — solo se compró el dominio ahí). El sitio es una SPA estática de Vite; deploy automático con cada `git push` a `main`.
+- **Dominio canónico:** `https://www.haikrom.com` (es el "Production" en Vercel).
+- **Redirects 308 → www.haikrom.com:** `haikrom.com`, `haikrom.mx`, `www.haikrom.mx`.
+- **Registrador / DNS:** GoDaddy (dominios `haikrom.com` y `haikrom.mx`).
+
+### Registros DNS en GoDaddy (en AMBOS dominios)
+| Tipo  | Nombre | Valor                                | Notas |
+|-------|--------|--------------------------------------|-------|
+| A     | `@`    | `76.76.21.21`                        | Apex → Vercel |
+| CNAME | `www`  | `6db8f9f423c3d1a1.vercel-dns-017.com.`| Valor exacto lo da Vercel por dominio; puede variar |
+
+- **No tocar en GoDaddy:** `NS`, `SOA`, `CNAME _domainconnect`, `TXT _dmarc` y cualquier `MX` (correo).
+- Si Vercel marca un dominio como "Invalid Configuration" es propagación DNS — dar **Refresh**; el SSL se emite solo.
+- **Importante:** si algún día se cambia el canónico a `haikrom.com` (sin www), actualizar las 4 URLs en `index.html` (canonical, og:url, og:image, twitter:image) y `robots.txt`/`sitemap.xml`.
 
 ## Componentes clave
 
